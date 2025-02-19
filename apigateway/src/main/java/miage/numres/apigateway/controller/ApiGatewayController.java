@@ -46,7 +46,7 @@ public class ApiGatewayController {
      */
     @GetMapping("/patients/{patientId}")
     @HystrixCommand(fallbackMethod = "getPatientFallback")
-    public String getPatientDetails(@PathVariable Long patientId) {
+    public String getPatientDetails(@PathVariable int patientId) {
         System.out.println("Fetching details for Patient ID: " + patientId);
 
         String response = restTemplate.exchange(
@@ -60,7 +60,7 @@ public class ApiGatewayController {
         return response;
     }
 
-    public String getPatientFallback(@PathVariable Long patientId) {
+    public String getPatientFallback(@PathVariable int patientId) {
         return "Fallback: Patient service is unavailable for patient ID " + patientId;
     }
 
@@ -91,7 +91,7 @@ public class ApiGatewayController {
      */
     @GetMapping("/praticiens/{praticienId}")
     @HystrixCommand(fallbackMethod = "getPraticienFallback")
-    public String getPraticienDetails(@PathVariable Long praticienId) {
+    public String getPraticienDetails(@PathVariable int praticienId) {
         System.out.println("Fetching details for Praticien ID: " + praticienId);
 
         String response = restTemplate.exchange(
@@ -105,7 +105,7 @@ public class ApiGatewayController {
         return response;
     }
 
-    public String getPraticienFallback(@PathVariable Long praticienId) {
+    public String getPraticienFallback(@PathVariable int praticienId) {
         return "Fallback: Praticien service is unavailable for praticien ID " + praticienId;
     }
 

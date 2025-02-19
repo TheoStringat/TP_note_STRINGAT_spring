@@ -1,23 +1,23 @@
 package miage.numres.praticien.model;
 
 public class Praticien {
-    private Long id;
+    private int id;
     private String nom;
 
     public Praticien() {
     }
 
-    public Praticien(Long id, String nom) {
+    public Praticien(int id, String nom) {
         this.id = id;
         this.nom = nom;
     }
 
     // Getters et Setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

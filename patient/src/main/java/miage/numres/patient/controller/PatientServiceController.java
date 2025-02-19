@@ -14,7 +14,7 @@ public class PatientServiceController {
 
     // Cette liste simule une base de données en mémoire
     private List<Patient> patients = new ArrayList<>();
-    private Long idCounter = 1L;
+    private int idCounter = 0;
 
     public PatientServiceController() {
         // Initialisation de la liste avec 4 patients
@@ -30,9 +30,9 @@ public class PatientServiceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Patient> getPatientById(@PathVariable Long id) {
+    public ResponseEntity<Patient> getPatientById(@PathVariable int id) {
         Optional<Patient> patient = patients.stream()
-                .filter(p -> p.getId().equals(id))
+                .filter(p -> p.getId() == id)
                 .findFirst();
         return patient.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -46,9 +46,9 @@ public class PatientServiceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient patientDetails) {
+    public ResponseEntity<Patient> updatePatient(@PathVariable int id, @RequestBody Patient patientDetails) {
         Optional<Patient> patient = patients.stream()
-                .filter(p -> p.getId().equals(id))
+                .filter(p -> p.getId() == id)
                 .findFirst();
 
         if (patient.isPresent()) {
@@ -62,8 +62,8 @@ public class PatientServiceController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePatient(@PathVariable Long id) {
-        boolean removed = patients.removeIf(p -> p.getId().equals(id));
+    public ResponseEntity<?> deletePatient(@PathVariable int id) {
+        boolean removed = patients.removeIf(p -> p.getId() == id);
         if (removed) {
             return ResponseEntity.ok().build();
         } else {
