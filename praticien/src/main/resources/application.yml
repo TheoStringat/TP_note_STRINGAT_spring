@@ -15,7 +15,7 @@ eureka:
 
 spring:
   application:
-    name: praticien
+    name: praticien-service
 
 management:
   security:
