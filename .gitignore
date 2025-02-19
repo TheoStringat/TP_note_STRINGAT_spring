@@ -1,0 +1,28 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Spring Boot
+target/
+!.mvn/wrapper/maven-wrapper.properties
+
+# Maven
+.mvn/
+mvnrepository/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+*.tmp
+*.tmp.*
