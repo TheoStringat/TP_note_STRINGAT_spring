@@ -10,13 +10,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/patients")
-public class PatientController {
+public class PatientServiceController {
 
     // Cette liste simule une base de données en mémoire
     private List<Patient> patients = new ArrayList<>();
     private Long idCounter = 1L;
 
-    public PatientController() {
+    public PatientServiceController() {
         // Initialisation de la liste avec 4 patients
         patients.add(new Patient(idCounter++, "John Doe"));
         patients.add(new Patient(idCounter++, "Jane Smith"));

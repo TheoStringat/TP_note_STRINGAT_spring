@@ -10,14 +10,14 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/praticiens")
-public class PraticienController {
+public class PraticienServiceController {
 
     // Cette liste simule une base de données en mémoire
     private List<Praticien> praticiens = new ArrayList<>();
     private Long idCounter = 1L;
 
     // Initialisation de la liste avec 4 praticiens
-    public PraticienController() {
+    public PraticienServiceController() {
         praticiens.add(new Praticien(idCounter++, "Dr. House"));
         praticiens.add(new Praticien(idCounter++, "Dr. Watson"));
         praticiens.add(new Praticien(idCounter++, "Dr. Brown"));
