@@ -9,21 +9,46 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
+import java.util.Collections;
+import java.util.List;
+
 @RestController
+@RequestMapping("/gateway")
 public class ApiGatewayController {
 
     @Autowired
     private RestTemplate restTemplate;
 
     /**
-     * Récupère les détails d'un patient en appelant le microservice "patient-service".
+     * Récupérer tous les patients via le microservice patient-service
      */
-    @RequestMapping(value = "/patientDetails/{patientId}", method = RequestMethod.GET)
+    @GetMapping("/patients")
+    @HystrixCommand(fallbackMethod = "getAllPatientsFallback")
+    public List<String> getAllPatients() {
+        System.out.println("Fetching all patients...");
+
+        List<String> response = restTemplate.exchange(
+                "http://patient-service/api/patients",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<String>>() {}
+        ).getBody();
+
+        return response;
+    }
+
+    public List<String> getAllPatientsFallback() {
+        return Collections.singletonList("Fallback: Patient service unavailable");
+    }
+
+    /**
+     * Récupérer un patient par son ID via le microservice patient-service
+     */
+    @GetMapping("/patients/{patientId}")
     @HystrixCommand(fallbackMethod = "getPatientFallback")
     public String getPatientDetails(@PathVariable Long patientId) {
-        System.out.println("Getting Patient details for ID: " + patientId);
+        System.out.println("Fetching details for Patient ID: " + patientId);
 
-        // Appel REST vers le microservice "patient-service" : "/api/patients/{id}"
         String response = restTemplate.exchange(
                 "http://patient-service/api/patients/{id}",
                 HttpMethod.GET,
@@ -32,27 +57,43 @@ public class ApiGatewayController {
                 patientId
         ).getBody();
 
-        System.out.println("Patient-service response: " + response);
-
-        return "Patient ID: " + patientId + " [Patient Details: " + response + "]";
+        return response;
     }
 
-    /**
-     * Fallback method si l'appel à patient-service échoue ou prend trop de temps.
-     */
     public String getPatientFallback(@PathVariable Long patientId) {
-        return "Fallback response: Patient service is unavailable for patient ID " + patientId;
+        return "Fallback: Patient service is unavailable for patient ID " + patientId;
     }
 
     /**
-     * Récupère les détails d'un praticien en appelant le microservice "praticien-service".
+     * Récupérer tous les praticiens via le microservice praticien-service
      */
-    @RequestMapping(value = "/praticienDetails/{praticienId}", method = RequestMethod.GET)
+    @GetMapping("/praticiens")
+    @HystrixCommand(fallbackMethod = "getAllPraticiensFallback")
+    public List<String> getAllPraticiens() {
+        System.out.println("Fetching all praticiens...");
+
+        List<String> response = restTemplate.exchange(
+                "http://praticien-service/api/praticiens",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<String>>() {}
+        ).getBody();
+
+        return response;
+    }
+
+    public List<String> getAllPraticiensFallback() {
+        return Collections.singletonList("Fallback: Praticien service unavailable");
+    }
+
+    /**
+     * Récupérer un praticien par son ID via le microservice praticien-service
+     */
+    @GetMapping("/praticiens/{praticienId}")
     @HystrixCommand(fallbackMethod = "getPraticienFallback")
     public String getPraticienDetails(@PathVariable Long praticienId) {
-        System.out.println("Getting Praticien details for ID: " + praticienId);
+        System.out.println("Fetching details for Praticien ID: " + praticienId);
 
-        // Appel REST vers le microservice "praticien-service" : "/api/praticiens/{id}"
         String response = restTemplate.exchange(
                 "http://praticien-service/api/praticiens/{id}",
                 HttpMethod.GET,
@@ -61,16 +102,11 @@ public class ApiGatewayController {
                 praticienId
         ).getBody();
 
-        System.out.println("Praticien-service response: " + response);
-
-        return "Praticien ID: " + praticienId + " [Praticien Details: " + response + "]";
+        return response;
     }
 
-    /**
-     * Fallback method si l'appel à praticien-service échoue ou prend trop de temps.
-     */
     public String getPraticienFallback(@PathVariable Long praticienId) {
-        return "Fallback response: Praticien service is unavailable for praticien ID " + praticienId;
+        return "Fallback: Praticien service is unavailable for praticien ID " + praticienId;
     }
 
     /**

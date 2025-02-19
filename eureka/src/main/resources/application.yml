@@ -3,17 +3,19 @@ server:
 
 eureka:
   client:
-    registryFetchIntervalSeconds: 5
     registerWithEureka: false
+    fetchRegistry: false
     serviceUrl:
       defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka/
+  server:
+    wait-time-in-ms-when-sync-empty: 0
   instance:
-    leaseRenewalIntervalInSeconds: 10
+    hostname: localhost
 
-management:
-  security:
-    enabled: false
 spring:
+  application:
+    name: eureka-server
   boot:
     admin:
-      context-path: /admin  #A different context path for admin server has been provided not conflicting with eureka
+      context-path: /admin
+
